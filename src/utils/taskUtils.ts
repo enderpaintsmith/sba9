@@ -114,4 +114,92 @@ export function validateTask(data: TaskFormData): TaskFormErrors {
 export function formatDate(dateString: string): string {
   if (!dateString) return "";
 
-  const [year, month, day] =
+  const [year, month, day] = dateString.split("-").map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
+}
+
+// Counts the tasks for the statistics cards.
+export function getTaskStats(tasks: Task[]): TaskStats {
+  return {
+    total: tasks.length,
+    pending: tasks.filter((task) => task.status === "pending").length,
+    inProgress: tasks.filter((task) => task.status === "in-progress").length,
+    completed: tasks.filter((task) => task.status === "completed").length
+  };
+}
+
+// Creates a unique ID for a new task.
+export function createId(): string {
+  return crypto.randomUUID();
+}
+
+// Turns JSON text into a list of tasks, or returns null if the text is not valid.
+// Used for both saved data and imported files so bad data never reaches the app.
+export function parseTasks(text: string): Task[] | null {
+  try {
+    const data = JSON.parse(text);
+
+    // The data must be an array, and every item must have a text id and title.
+    if (
+      Array.isArray(data) &&
+      data.every(
+        (item) => typeof item.id === "string" && typeof item.title === "string"
+      )
+    ) {
+      return data;
+    }
+
+    return null;
+  } catch {
+    // JSON.parse throws an error when the text is not valid JSON.
+    return null;
+  }
+}
+
+// Loads the saved tasks, or the sample tasks if nothing valid is saved.
+export function loadTasks(): Task[] {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (saved) {
+      const tasks = parseTasks(saved);
+      if (tasks) return tasks;
+    }
+  } catch {
+    // localStorage can be unavailable, for example in private browsing.
+  }
+
+  return sampleTasks;
+}
+
+// Saves the tasks so they are still there after a page refresh.
+export function saveTasks(tasks: Task[]): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  } catch {
+    // If saving fails the app keeps working, the tasks just are not remembered.
+  }
+}
+
+// Downloads the tasks as a tasks.json file.
+export function downloadTasks(tasks: Task[]): void {
+  // A Blob is a file-like object made from the JSON text.
+  const blob = new Blob([JSON.stringify(tasks, null, 2)], {
+    type: "application/json"
+  });
+
+  // Create a temporary link that points at the blob, click it to start the download,
+  // then release the temporary URL.
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "tasks.json";
+  link.click();
+
+  URL.revokeObjectURL(url);
+}
