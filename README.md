@@ -90,4 +90,278 @@ These handlers use `setTasks(previous => ...)` so the update is based on the lat
 
 `Dashboard` also handles the overall layout, statistics, theme toggle, and component connections.
 
-One detail worth knowing is the `key` on `Task
+One detail worth knowing is the `key` on `TaskForm`. When the user switches between editing tasks or adding a new one, the key changes. React treats it as a new component and resets the form with the correct values.
+
+## The Form: `TaskForm.tsx`
+
+`TaskForm` handles both adding and editing tasks. It also validates the user's input.
+
+The form uses controlled inputs. That means the input values come from React state, and every change updates that state. React keeps track of what's in each field.
+
+`handleChange()` handles changes to the form fields. It uses the input's `name` and `value` to update the correct property.
+
+`handleSubmit()` prevents the page from refreshing, validates the form, and sends the data to `Dashboard` if everything is valid.
+
+The form uses `event.preventDefault()` to stop the browser's default submit behavior.
+
+If validation fails, the error messages appear under the relevant fields. If the form is valid, `onSubmit()` sends the data to the parent component.
+
+The form's heading and button also change depending on whether it's adding or editing a task. The Cancel button only appears when editing.
+
+## Filters, Lists, and Task Cards
+
+These components don't own shared task state. They display information and report user actions back to `Dashboard`.
+
+### `TaskFilter.tsx`
+
+This component displays the search field and status and priority dropdowns.
+
+When a filter changes, it calls `onFilterChange()` and sends the updated filter values to `Dashboard`.
+
+The Clear All button resets the filters. An active filters section also appears when one or more filters are being used.
+
+### `TaskList.tsx`
+
+This component displays the task count, sorting dropdown, and task cards.
+
+It uses a ternary to check whether there are any tasks to display. If there aren't, it shows an empty-state message. Otherwise, `.map()` creates a `TaskItem` for each task.
+
+Each item uses `key={task.id}`. This gives React a unique, stable identifier for tracking items when the list changes.
+
+### `TaskItem.tsx`
+
+This component displays one task card, including its title, description, priority, due date, and status.
+
+It also includes Edit and Delete buttons and a status dropdown.
+
+The CSS classes are based on the task's status, priority, and theme, which lets the card change its appearance depending on the data.
+
+The buttons use callback functions like `onDelete(task.id)`. `TaskItem` doesn't directly change the task. It reports the action to `Dashboard`, which handles the update.
+
+## What Happens When You Use the App?
+
+### Adding a Task
+
+The user fills out the form.
+
+`handleChange()` updates the form state as they type.
+
+When they submit, `validateTask()` checks the information.
+
+If everything is valid, `onSubmit()` sends the data to `Dashboard`.
+
+`Dashboard` creates an ID and adds the task to the list.
+
+React re-renders the dashboard, updates the statistics, and displays the new task.
+
+`useEffect` saves the updated list to localStorage.
+
+### Editing a Task
+
+The user clicks Edit on a task card.
+
+`TaskItem` calls `onEdit(task)`.
+
+`Dashboard` sets that task as `editingTask`.
+
+The form receives the task's existing information.
+
+After the user submits, `handleSubmit()` updates the matching task.
+
+The form returns to add mode.
+
+### Deleting a Task
+
+The user clicks Delete.
+
+`TaskItem` calls `onDelete(task.id)`.
+
+`Dashboard` uses `.filter()` to remove that task.
+
+React updates the list and saves the changes.
+
+### Searching and Filtering
+
+The user types in the search field or selects a filter.
+
+`TaskFilter` sends the new values to `Dashboard`.
+
+`useMemo` recalculates the visible tasks using `filterTasks()` and `sortTasks()`.
+
+`TaskList` displays the matching results.
+
+### Refreshing the Page
+
+When the app loads, `loadTasks()` checks localStorage for saved tasks. If valid data exists, it loads that data. Otherwise, it uses the sample tasks.
+
+The theme currently resets to light mode when the page refreshes.
+
+## A Few Other Details
+
+### Accessibility
+
+Labels use `htmlFor` to connect to their inputs. Validation messages use `role="alert"` so screen readers can announce them. `aria-invalid` identifies fields with errors.
+
+The CSS also includes a reduced-motion option for users who prefer less animation.
+
+### Styling
+
+`App.css` contains the dashboard and component styles. `index.css` handles global styles.
+
+CSS variables control the colors for light and dark themes. Grid layouts make the dashboard responsive, and task status and priority classes control the colors of cards and badges.
+
+### Running and Building the Project
+
+Install the dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Build the project and check for TypeScript errors:
+
+```bash
+npm run build
+```
+
+The project is tracked with Git and pushed to GitHub for submission.
+
+## Questions an Instructor Might Ask
+
+### Why is state in Dashboard?
+
+Multiple components need the same data, so it lives in their closest common parent. This is called lifting state up.
+
+### What's the difference between state and props?
+
+State is owned and updated by a component. Props are passed down from a parent.
+
+### How does a child update parent state?
+
+It calls a callback function passed down through props.
+
+### What is a controlled form?
+
+Input values are managed by React state.
+
+### Why use `.map()` and `.filter()`?
+
+They create updated arrays without directly changing the original state.
+
+### What does `key` do?
+
+It gives React a stable way to identify each item in a list.
+
+### What does `useEffect` do here?
+
+It saves task changes to localStorage.
+
+### What does `useMemo` do here?
+
+It remembers the filtered and sorted list until its dependencies change.
+
+### What is `Omit<Task, "id">`?
+
+It creates a version of the Task type without the ID property.
+
+### What is a union type?
+
+A type that only allows a specific set of values.
+
+### Why use `try/catch`?
+
+It handles errors when reading or parsing saved data.
+
+### Why use `crypto.randomUUID()`?
+
+To give every new task a unique ID.
+
+## What I'd Improve Next
+
+I'd like to save the theme preference in localStorage and add a way to reorder tasks.
+
+The biggest thing to remember when explaining this project is the data flow: Dashboard owns the state, props pass information down, and callbacks send user actions back up. Once that makes sense, the rest of the component structure is much easier to explain.
+
+## References
+
+### React Documentation
+
+[Rendering Lists](https://react.dev/learn/rendering-lists)
+
+[Conditional Rendering](https://react.dev/learn/conditional-rendering)
+
+[useState](https://react.dev/reference/react/useState)
+
+[Updating Arrays in State](https://react.dev/learn/updating-arrays-in-state)
+
+[Sharing State Between Components](https://react.dev/learn/sharing-state-between-components)
+
+[useMemo](https://react.dev/reference/react/useMemo)
+
+[useEffect](https://react.dev/reference/react/useEffect)
+
+[Synchronizing with Effects](https://react.dev/learn/synchronizing-with-effects)
+
+[Preserving and Resetting State](https://react.dev/learn/preserving-and-resetting-state)
+
+### TypeScript Documentation
+
+[Utility Types](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+
+### MDN Web Docs
+
+[Optional Chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining)
+
+[Nullish Coalescing](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing)
+
+[Crypto.randomUUID()](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID)
+
+[JSON.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse)
+
+[try...catch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch)
+
+[Window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
+
+### React Documentation
+
+Rendering Lists
+
+Conditional Rendering
+
+useState
+
+Updating Arrays in State
+
+Sharing State Between Components
+
+useMemo
+
+useEffect
+
+Synchronizing with Effects
+
+Preserving and Resetting State
+
+### TypeScript Documentation
+
+Utility Types
+
+### MDN Web Docs
+
+Optional Chaining
+
+Nullish Coalescing
+
+Crypto.randomUUID()
+
+JSON.parse()
+
+try...catch
+
+Window.localStorage
