@@ -10,17 +10,17 @@ The dashboard is built around a main parent component called `Dashboard`. It man
 
 `taskUtils.ts` contains reusable functions for filtering, sorting, validation, dates, and storage. `types/index.ts` defines the TypeScript types and interfaces.
 
-The important idea is that the state lives in one parent component. Data gets passed down through props, and user actions get sent back up through callback functions.
+The main concept to preserve is that the state lives in one parent component. Data gets passed down through props, & user actions get sent back up through callback functions.
 
 ## How Data Moves Through the App
 
-There are two main directions.
+There are two main directions:
 
-**Props go down:** A parent passes information to a child component. The child can use that information, but it doesn't directly change the parent's state.
+**Props go down:** A parent passes information to a child component; the child can use that information, but it doesn't directly change the parent's state.
 
-**Callbacks go up:** A parent passes a function to a child. When the user interacts with the child, it calls that function, and the parent handles the update.
+**Callbacks go up:** A parent passes a function to a child; when the user interacts with the child, it calls that function in question, and the parent handles the update.
 
-For example, `Dashboard` passes tasks to `TaskList`, which passes individual tasks to `TaskItem`. When the user clicks Delete, `TaskItem` calls `onDelete(id)`. That function came from `Dashboard`, so the parent handles removing the task.
+Example, `Dashboard` passes tasks to `TaskList`, which passes individual tasks to `TaskItem`. When the user clicks Delete, `TaskItem` calls `onDelete(id)`. That function came from `Dashboard`, so the parent handles removing the task.
 
 This is called **lifting state up**. When multiple components need the same information, it makes sense to keep that state in their closest common parent.
 
@@ -30,9 +30,9 @@ We also avoid changing arrays directly. Instead, we use methods like `.map()`, `
 
 This file defines the structure of the data used throughout the app. It doesn't contain application logic.
 
-`TaskStatus`, `TaskPriority`, `Theme`, and `TaskSort` are union types. They restrict values to specific options, which helps prevent mistakes like using an invalid status.
+`TaskStatus`, `TaskPriority`, `Theme`, and `TaskSort` are union types. They restrict values to specific options, which help to prevent mistakes like using an invalid status.
 
-The `Task` interface describes the properties of a task. `TaskFormData` uses `Omit<Task, "id">` because a new task doesn't have an ID until it is saved.
+The `Task` interface describes the properties of a task. `TaskFormData` uses `Omit<Task, "id">` because a new task doesn't have an ID until it's saved.
 
 `TaskFormErrors` holds validation messages, and its properties are optional because only fields with problems need an error message. `TaskFilters` defines the search, status, and priority filters. `TaskStats` describes the numbers shown in the dashboard's stat cards.
 
