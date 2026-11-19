@@ -1,4 +1,5 @@
 // Defines the only three valid task statuses.
+// restrict the possible values and help TypeScript catch invalid values before runtime
 export type TaskStatus = "pending" | "in-progress" | "completed";
 
 // Defines the three valid priority levels.
