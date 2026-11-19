@@ -328,6 +328,8 @@ The biggest thing to remember when explaining this project is the data flow: Das
 
 [Window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
 
+https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/aside
+
 ### React Documentation
 
 Rendering Lists https://react.dev/learn/rendering-lists
@@ -336,9 +338,13 @@ Conditional Rendering https://react.dev/learn/conditional-rendering
 
 useState https://react.dev/reference/react/useState
 
+updating objects in state https://react.dev/learn/updating-objects-in-state
+
 Updating Arrays in State https://react.dev/learn/updating-arrays-in-state
 
 Sharing State Between Components https://react.dev/learn/sharing-state-between-components
+
+Preserving and resetting state https://react.dev/learn/preserving-and-resetting-state
 
 useMemo https://react.dev/reference/react/useMemo
 
@@ -365,3 +371,4 @@ JSON.parse() https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/G
 try...catch https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch
 
 Window.localStorage https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
+

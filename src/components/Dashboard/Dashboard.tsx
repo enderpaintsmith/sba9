@@ -24,8 +24,7 @@ import {
 export function Dashboard() {
     // Passing loadTasks as a function lets React use it to initialize
     // the task state from localStorage.
-    // this only runs once
-    const [tasks, setTasks] = useState<Task[]>(loadTasks);
+    // (loadTasks) only runs once to prevent unnecessary re-renders
     const [tasks, setTasks] = useState<Task[]>(loadTasks);
 
     // Stores the search text and the selected status and priority filters.
@@ -34,27 +33,32 @@ export function Dashboard() {
     // Stores how the list is sorted.
     const [sort, setSort] = useState<TaskSort>("default");
 
-    // Stores the task being edited, or null when the form is adding a new task.
+    // Stores the task being edited, or null when not editing
+    // Empty on initial load
     const [editingTask, setEditingTask] = useState<Task | null>(null);
 
     // Stores the current color theme.
     const [theme, setTheme] = useState<Theme>("light");
 
-    // Saves the tasks to localStorage every time they change.
+    // Saves tasks to localStorage every time they change.
     useEffect(() => {
         saveTasks(tasks);
     }, [tasks]);
 
-    // Creates the list the user sees: filtered first, then sorted.
-    // useMemo only recalculates when tasks, filters, or sort change.
+    // Creates a filtered list which is then sorted.
+    // useMemo stores calculation and only recalculates when 
+    // tasks, filters, or sort change.
+    // List results are stored in visibleTasks
     const visibleTasks = useMemo(
         () => sortTasks(filterTasks(tasks, filters), sort),
+    // Dependency Array of reactive values
         [tasks, filters, sort]
     );
 
     const stats = getTaskStats(tasks);
 
     // Lists the data for the statistics cards so they can be rendered with map().
+    // Runs whenever Dashboard renders
     const statCards = [
         { label: "Total", value: stats.total },
         { label: "Pending", value: stats.pending },
@@ -63,29 +67,43 @@ export function Dashboard() {
     ];
 
     // Adds a new task, or updates the one being edited.
+    // TaskFormData contains user input
     function handleSubmit(data: TaskFormData) {
         if (editingTask) {
             // Replace the edited task with a copy that has the new values.
+            // (previous) is the newest version of the task list, from React
             setTasks((previous) =>
+                // map builds a new list
                 previous.map((task) =>
+                    // If this is the task being edited: ...task copies the old task & id,
+                    // then ...data copies the form values over it.
+                    // Otherwise (: task) keep it unchanged.
+                    // Spread op. copies the values from task and data 
+                    // A new 'task' object is created rather than modifying the original task
                     task.id === editingTask.id ? { ...task, ...data } : task
                 )
             );
+            // Return form to 'add' mode
             setEditingTask(null);
         } else {
-            // Add the new task to the top of the list.
+            // Add the new task to the top of the list. And create new id
+            // Functional State Update
             setTasks((previous) => [{ id: createId(), ...data }, ...previous]);
         }
     }
 
-    // Updates a task's status by finding it through its unique ID.
+    // Finds a task by id and creates an updated copy with new status
     function handleStatusChange(id: string, status: TaskStatus) {
         setTasks((previous) =>
             previous.map((task) => (task.id === id ? { ...task, status } : task))
         );
     }
 
-    // Removes a task by keeping every task except the one with the matching ID.
+    // Removes a task by keeping every task except the matching/given ID using .filter()
+    //.map() transforms every item in an array and returns a new array. 
+    // creates an updated version of the matching task while leaving the others unchanged--in above code
+    //.filter() tests every item against a condition and returns a 
+    //new array containing only the items that pass.
     function handleDelete(id: string) {
         setTasks((previous) => previous.filter((task) => task.id !== id));
 
@@ -132,6 +150,9 @@ export function Dashboard() {
                         {/* Changing the key makes React create a fresh form,
                 so the fields reset when switching between adding and editing. */}
                         <TaskForm
+                            // key will change when user switches from editing one task to another
+                            // or from editing to creating a new task.
+                            // React treats it as a new component instance and resets the form's internal state.
                             key={editingTask ? editingTask.id : "new"}
                             initialTask={editingTask}
                             onSubmit={handleSubmit}
@@ -143,7 +164,8 @@ export function Dashboard() {
                     </aside>
 
                     <main>
-                        {/* Passes the filtered and sorted tasks and all the callbacks to the list. */}
+                        {/* Passes the filtered and sorted tasks and all the callbacks to the list. 
+                         --parent-to-child communication */}
                         <TaskList
                             tasks={visibleTasks}
                             sort={sort}
