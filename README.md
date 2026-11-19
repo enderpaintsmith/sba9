@@ -46,11 +46,11 @@ This file holds reusable functions that handle common tasks. They don't use Reac
 
 `sortTasks()` sorts tasks by due date or priority. It makes a copy first because `.sort()` changes the original array.
 
-`validateTask()` checks that the title, description, and due date meet the form requirements.
+`validateTask()` checks that the title, description, and due date meet form requirements.
 
 `formatDate()` converts a date like `2026-11-06` into a readable format like `Nov 6, 2026`.
 
-`getTaskStats()` counts all tasks and calculates how many are pending, in progress, or completed.
+`getTaskStats()` counts all tasks and calculates how many are pending, in prog, or completed.
 
 `createId()` uses `crypto.randomUUID()` to generate a unique ID for each new task.
 
@@ -74,7 +74,7 @@ This is where the shared state lives and where most of the app's main logic happ
 
 `useMemo` remembers the filtered and sorted task list. It only recalculates when the tasks, filters, or sorting option change.
 
-The order matters: the app filters the tasks first, then sorts the remaining results.
+The order MATTERS: the app filters the tasks first, then sorts the remaining results.
 
 ### Main Handlers
 
