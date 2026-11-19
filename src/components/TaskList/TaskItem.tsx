@@ -11,8 +11,7 @@ export function TaskItem({
   onEdit
 }: TaskItemProps) {
   // Runs when status dropdown changes.
-  function handleStatusChange(event: React.ChangeEvent<HTMLSelectElement>) {
-  // The dropdown only has valid statuses, so we tell TypeScript this text is a TaskStatus.
+// The dropdown only has valid statuses, so we tell TypeScript this text is a TaskStatus.
     onStatusChange(task.id, event.target.value as TaskStatus);
   }
 
