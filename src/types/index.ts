@@ -38,11 +38,8 @@ export interface TaskFilters {
 }
 
 // Defines the ways the list can be sorted.
-// "manual" keeps the order the user arranged.
-export type TaskSort = "manual" | "due-asc" | "due-desc" | "priority";
-
-// Defines the directions a task can be moved.
-export type MoveDirection = "up" | "down";
+// "default" keeps the order the tasks were added.
+export type TaskSort = "default" | "due-asc" | "due-desc" | "priority";
 
 // Defines the numbers shown in the statistics cards.
 export interface TaskStats {
@@ -61,19 +58,15 @@ export interface TaskListProps {
   onStatusChange: (id: string, status: TaskStatus) => void;
   onDelete: (id: string) => void;
   onEdit: (task: Task) => void;
-  onMove: (id: string, direction: MoveDirection) => void;
 }
 
 // Defines the props required by an individual TaskItem.
-// showReorder controls whether the move buttons appear.
 export interface TaskItemProps {
   task: Task;
   theme: Theme;
-  showReorder: boolean;
   onStatusChange: (id: string, status: TaskStatus) => void;
   onDelete: (id: string) => void;
   onEdit: (task: Task) => void;
-  onMove: (id: string, direction: MoveDirection) => void;
 }
 
 // Defines the props required by the TaskForm component.

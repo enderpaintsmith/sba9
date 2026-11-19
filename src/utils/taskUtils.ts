@@ -79,7 +79,7 @@ export function sortTasks(tasks: Task[], sort: TaskSort): Task[] {
     sorted.sort((a, b) => priorityRank[a.priority] - priorityRank[b.priority]);
   }
 
-  // "manual" keeps the order the user arranged.
+  // "default" keeps the order the tasks were added.
   return sorted;
 }
 
@@ -138,7 +138,7 @@ export function createId(): string {
 }
 
 // Turns JSON text into a list of tasks, or returns null if the text is not valid.
-// Used for both saved data and imported files so bad data never reaches the app.
+// Used to check the saved data so bad data never reaches the app.
 export function parseTasks(text: string): Task[] | null {
   try {
     const data = JSON.parse(text);
@@ -183,23 +183,4 @@ export function saveTasks(tasks: Task[]): void {
   } catch {
     // If saving fails the app keeps working, the tasks just are not remembered.
   }
-}
-
-// Downloads the tasks as a tasks.json file.
-export function downloadTasks(tasks: Task[]): void {
-  // A Blob is a file-like object made from the JSON text.
-  const blob = new Blob([JSON.stringify(tasks, null, 2)], {
-    type: "application/json"
-  });
-
-  // Create a temporary link that points at the blob, click it to start the download,
-  // then release the temporary URL.
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-
-  link.href = url;
-  link.download = "tasks.json";
-  link.click();
-
-  URL.revokeObjectURL(url);
 }
