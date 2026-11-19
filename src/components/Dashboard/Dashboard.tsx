@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import type { ChangeEvent } from "react";
 import { TaskForm } from "../TaskForm/TaskForm";
 import { TaskFilter } from "../TaskFilter/TaskFilter";
 import { TaskList } from "../TaskList/TaskList";
 import type {
-  MoveDirection,
   Task,
   TaskFilters,
   TaskFormData,
@@ -14,11 +12,9 @@ import type {
 } from "../../types";
 import {
   createId,
-  downloadTasks,
   filterTasks,
   getTaskStats,
   loadTasks,
-  parseTasks,
   saveTasks,
   sortTasks
 } from "../../utils/taskUtils";
@@ -34,16 +30,13 @@ export function Dashboard() {
   const [filters, setFilters] = useState<TaskFilters>({ search: "" });
 
   // Stores how the list is sorted.
-  const [sort, setSort] = useState<TaskSort>("manual");
+  const [sort, setSort] = useState<TaskSort>("default");
 
   // Stores the task being edited, or null when the form is adding a new task.
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   // Stores the current color theme.
   const [theme, setTheme] = useState<Theme>("light");
-
-  // Stores a short status message for export and import.
-  const [message, setMessage] = useState("");
 
   // Saves the tasks to localStorage every time they change.
   useEffect(() => {
@@ -100,51 +93,6 @@ export function Dashboard() {
     }
   }
 
-  // Swaps a task with the one above or below it in the visible list.
-  function handleMove(id: string, direction: MoveDirection) {
-    // Find the task and its neighbor in the list the user sees.
-    const index = visibleTasks.findIndex((task) => task.id === id);
-    const neighbor = visibleTasks[direction === "up" ? index - 1 : index + 1];
-
-    // The first task can't move up and the last can't move down.
-    if (!neighbor) return;
-
-    setTasks((previous) => {
-      // Copy the array, find both positions, and swap them.
-      const copy = [...previous];
-      const from = copy.findIndex((task) => task.id === id);
-      const to = copy.findIndex((task) => task.id === neighbor.id);
-      [copy[from], copy[to]] = [copy[to], copy[from]];
-      return copy;
-    });
-  }
-
-  // Downloads the tasks as a file and shows a confirmation.
-  function handleExport() {
-    downloadTasks(tasks);
-    setMessage("Tasks exported to tasks.json.");
-  }
-
-  // Reads the chosen JSON file and replaces the tasks if the file is valid.
-  async function handleImport(event: ChangeEvent<HTMLInputElement>) {
-    const input = event.target;
-    const file = input.files?.[0];
-    if (!file) return;
-
-    const imported = parseTasks(await file.text());
-
-    if (imported) {
-      setTasks(imported);
-      setEditingTask(null);
-      setMessage(`Imported ${imported.length} tasks.`);
-    } else {
-      setMessage("Import failed: that file is not a valid task list.");
-    }
-
-    // Clears the input so choosing the same file again still triggers onChange.
-    input.value = "";
-  }
-
   return (
     // The theme is added as a class on the outer element,
     // and the CSS changes the colors based on it.
@@ -190,32 +138,6 @@ export function Dashboard() {
 
             {/* setFilters is passed down as the callback the filter calls. */}
             <TaskFilter filters={filters} onFilterChange={setFilters} />
-
-            <section className="tools">
-              <h2>Save &amp; Share</h2>
-              <div className="tools-buttons">
-                <button type="button" onClick={handleExport}>
-                  Export
-                </button>
-
-                {/* The file input is hidden; clicking this label opens the file picker. */}
-                <label className="button secondary">
-                  Import
-                  <input
-                    type="file"
-                    accept="application/json"
-                    onChange={handleImport}
-                    hidden
-                  />
-                </label>
-              </div>
-
-              {message && (
-                <p className="tools-message" role="status">
-                  {message}
-                </p>
-              )}
-            </section>
           </aside>
 
           <main>
@@ -228,7 +150,6 @@ export function Dashboard() {
               onStatusChange={handleStatusChange}
               onDelete={handleDelete}
               onEdit={setEditingTask}
-              onMove={handleMove}
             />
           </main>
         </div>
