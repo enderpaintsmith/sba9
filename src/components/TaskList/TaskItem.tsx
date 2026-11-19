@@ -1,8 +1,8 @@
 import type { TaskItemProps, TaskStatus } from "../../types";
 import { formatDate } from "../../utils/taskUtils";
 
-// Displays one task and reports user actions back to the parent through callback
-// never changes the task itself; the Dashboard controls the data.
+// Displays one task and reports user actions back to the parent through callbacks.
+// It never changes the task itself; the Dashboard owns the data.
 export function TaskItem({
   task,
   theme,
@@ -10,14 +10,14 @@ export function TaskItem({
   onDelete,
   onEdit
 }: TaskItemProps) {
-  // Runs when status dropdown changes.
-// The dropdown only has valid statuses, so we tell TypeScript this text is a TaskStatus.
+  // Runs when the status dropdown changes.
+  function handleStatusChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    // The dropdown only has valid statuses, so we tell TypeScript this text is a TaskStatus.
     onStatusChange(task.id, event.target.value as TaskStatus);
   }
 
   return (
-    // The status, priority, and theme are added with CSS classes so each can be sty
-    // led.
+    // The status, priority, and theme are added as CSS classes so each can be styled.
     <article className={`task-item ${task.status} ${task.priority} ${theme}`}>
       <div className="task-item-header">
         <h3>{task.title}</h3>
