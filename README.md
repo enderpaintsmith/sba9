@@ -330,38 +330,38 @@ The biggest thing to remember when explaining this project is the data flow: Das
 
 ### React Documentation
 
-Rendering Lists
+Rendering Lists https://react.dev/learn/rendering-lists
 
-Conditional Rendering
+Conditional Rendering https://react.dev/learn/conditional-rendering
 
-useState
+useState https://react.dev/reference/react/useState
 
-Updating Arrays in State
+Updating Arrays in State https://react.dev/learn/updating-arrays-in-state
 
-Sharing State Between Components
+Sharing State Between Components https://react.dev/learn/sharing-state-between-components
 
-useMemo
+useMemo https://react.dev/reference/react/useMemo
 
-useEffect
+useEffect https://react.dev/reference/react/useEffect
 
-Synchronizing with Effects
+Synchronizing with Effects https://react.dev/learn/synchronizing-with-effects
 
-Preserving and Resetting State
+Preserving and Resetting State https://react.dev/learn/preserving-and-resetting-state
 
 ### TypeScript Documentation
 
-Utility Types
+Utility Types https://www.typescriptlang.org/docs/handbook/utility-types.html
 
 ### MDN Web Docs
 
-Optional Chaining
+Optional Chaining https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
 
-Nullish Coalescing
+Nullish Coalescing https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing
 
-Crypto.randomUUID()
+Crypto.randomUUID() https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID
 
-JSON.parse()
+JSON.parse() https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
 
-try...catch
+try...catch https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch
 
-Window.localStorage
+Window.localStorage https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
