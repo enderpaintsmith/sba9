@@ -14,21 +14,25 @@ const emptyForm: TaskFormData = {
 // Displays a form for adding a new task or editing an existing one.
 // When initialTask is provided, the form starts with that task's values 
 // 'edit mode'.
+// initialTask through props in dashboard
 export function TaskForm({ initialTask, onSubmit, onCancel }: TaskFormProps) {
   // Stores what the user has typed. Every input gets its value from this state,
   // which makes the form a "controlled" form.
-  // Ternary op. 'condition ? valueIfTrue : valueIfFalse'
-  // Does initialTask exist? Populate form with that task's info
+  // Ternary op. checks whether initialTask exists
+  // Does initialTask exist? useState Populates form with that task's values
+  // ONLY when the component first renders
   // Else initialize empty form
+
+  // Inputs use formData as their value, so they display whatever is stored in state.
   const [formData, setFormData] = useState<TaskFormData>(
     initialTask
       ? {
-          title: initialTask.title,
-          description: initialTask.description,
-          status: initialTask.status,
-          priority: initialTask.priority,
-          dueDate: initialTask.dueDate
-        }
+        title: initialTask.title,
+        description: initialTask.description,
+        status: initialTask.status,
+        priority: initialTask.priority,
+        dueDate: initialTask.dueDate
+      }
       : emptyForm
   );
 
@@ -48,27 +52,34 @@ export function TaskForm({ initialTask, onSubmit, onCancel }: TaskFormProps) {
     // this single handler manages all form fields
     const { name, value } = event.target;
     // [name] computed property names (or computed keys).
+    // Refers to the input field that triggered the change
+    // ...previous includes the data from the prior object
+    // [name]: value updates only the changed property
     setFormData((previous) => ({ ...previous, [name]: value }));
   }
 
-  // Runs when the form is submitted: validates first, then sends the data to the parent.
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    // Stops the browser from reloading the page when the form is submitted.
+  // Runs when the form is submitted; Validates first, then Sends the data to the Parent
+  function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+
+    // Stops the browser from native form submission behavior
     event.preventDefault();
 
+    // call the function from task utils
     const newErrors = validateTask(formData);
     setErrors(newErrors);
 
     // If there is at least one error message, stop here so the messages can show.
+    // setErrors() updates state, and JSX displays them
     if (Object.keys(newErrors).length > 0) return;
 
+    //send valid data to dashboard using onSubmit, a callback from the Dashboard
     onSubmit({
       ...formData,
       title: formData.title.trim(),
       description: formData.description.trim()
     });
 
-    // Clears the form after adding. When editing, the Dashboard closes the form instead.
+    // If this is a new task--not an edit--clear the form
     if (!initialTask) {
       setFormData(emptyForm);
     }

@@ -6,10 +6,22 @@ import type { TaskFilterProps, TaskPriority, TaskStatus } from "../../types";
 export function TaskFilter({ filters, onFilterChange }: TaskFilterProps) {
   // Each handler copies the existing filters ({ ...filters }) and changes one value,
   // so the other filters are kept.
-  function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
+
+  // ChangeEvent is one of React’s types, and React tells TypeScript where to find it.
+  // Like surnmame, christian name convention: React.ChangeEvent means 
+  // “the ChangeEvent that belongs to React.”
+  // value takes current search text
+  // copy filters with spread op and update search property
+  // onFilterChange sends the new object to Dashboard
+  function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>)
+  //update filters without losing the data from the original object
+  {
     onFilterChange({ ...filters, search: event.target.value });
   }
 
+  // event.target.value grabs seleced drodown value
+  // TaskStatus | "" validates with TS that this is a valid input
+  // value || undefined changes an empty slection into undefined--no filter is active
   function handleStatusChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.target.value as TaskStatus | "";
 
@@ -22,7 +34,7 @@ export function TaskFilter({ filters, onFilterChange }: TaskFilterProps) {
     onFilterChange({ ...filters, priority: value || undefined });
   }
 
-  // Turns off every filter and clears the search box.
+  // Turns off every filter and clears the search field
   function clearFilters() {
     onFilterChange({ search: "" });
   }
@@ -71,7 +83,7 @@ export function TaskFilter({ filters, onFilterChange }: TaskFilterProps) {
         <option value="high">High</option>
       </select>
 
-      {/* Active filter indicators: only shown while a filter is turned on. */}
+      {/* Active filter indicators: only shown while a filter is turned on with &&  */}
       {hasActiveFilters && (
         <div className="active-filters">
           <span className="active-label">Active filters:</span>
@@ -85,7 +97,8 @@ export function TaskFilter({ filters, onFilterChange }: TaskFilterProps) {
           {filters.priority && (
             <span className="chip">Priority: {filters.priority}</span>
           )}
-
+          // 'Secondary' applies styling 
+          // Type button removes default type = submit 
           <button type="button" className="secondary" onClick={clearFilters}>
             Clear all
           </button>

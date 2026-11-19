@@ -330,6 +330,8 @@ The biggest thing to remember when explaining this project is the data flow: Das
 
 https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/aside
 
+Object Keys https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
+
 ### React Documentation
 
 Rendering Lists https://react.dev/learn/rendering-lists
@@ -345,6 +347,10 @@ Updating Arrays in State https://react.dev/learn/updating-arrays-in-state
 Sharing State Between Components https://react.dev/learn/sharing-state-between-components
 
 Preserving and resetting state https://react.dev/learn/preserving-and-resetting-state
+
+Setter functions and Re-Rendering https://react.dev/learn/state-a-components-memory
+
+Render and Commit https://react.dev/learn/render-and-commit
 
 useMemo https://react.dev/reference/react/useMemo
 
@@ -370,6 +376,13 @@ JSON.parse() https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/G
 
 try...catch https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch
 
+spread syntax https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
+
 Window.localStorage https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
 
 Conditional Op https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator
+
+Computed Poperty Name https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#computed_property_names
+
+## etc.
+Chips https://m2.material.io/components/chips
