@@ -58,6 +58,7 @@ export function TaskFilter({ filters, onFilterChange }: TaskFilterProps) {
         <option value="completed">Completed</option>
       </select>
 
+
       <label htmlFor="priority-filter">Priority</label>
       <select
         id="priority-filter"
