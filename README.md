@@ -372,3 +372,4 @@ try...catch https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/St
 
 Window.localStorage https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
 
+Conditional Op https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator

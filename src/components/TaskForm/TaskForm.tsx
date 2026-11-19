@@ -12,10 +12,14 @@ const emptyForm: TaskFormData = {
 };
 
 // Displays a form for adding a new task or editing an existing one.
-// When initialTask is provided, the form starts with that task's values (edit mode).
+// When initialTask is provided, the form starts with that task's values 
+// 'edit mode'.
 export function TaskForm({ initialTask, onSubmit, onCancel }: TaskFormProps) {
   // Stores what the user has typed. Every input gets its value from this state,
   // which makes the form a "controlled" form.
+  // Ternary op. 'condition ? valueIfTrue : valueIfFalse'
+  // Does initialTask exist? Populate form with that task's info
+  // Else initialize empty form
   const [formData, setFormData] = useState<TaskFormData>(
     initialTask
       ? {
@@ -28,7 +32,7 @@ export function TaskForm({ initialTask, onSubmit, onCancel }: TaskFormProps) {
       : emptyForm
   );
 
-  // Stores the validation messages shown under the fields that have a problem.
+  // Stores the validation errors shown under the fields that have problem(s)
   const [errors, setErrors] = useState<TaskFormErrors>({});
 
   // Handles every field with one function.
@@ -38,7 +42,12 @@ export function TaskForm({ initialTask, onSubmit, onCancel }: TaskFormProps) {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) {
+    //event.target input element triggering the event
+    // { name, value } pair extract input's current value
+    // [name] uses the input's name as a dynamic object property
+    // this single handler manages all form fields
     const { name, value } = event.target;
+    // [name] computed property names (or computed keys).
     setFormData((previous) => ({ ...previous, [name]: value }));
   }
 
