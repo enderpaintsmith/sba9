@@ -1,25 +1,24 @@
 import type { TaskItemProps, TaskStatus } from "../../types";
 import { formatDate } from "../../utils/taskUtils";
 
-// Displays one task and reports user actions back to the parent through callbacks.
-// It never changes the task itself; the Dashboard owns the data.
+// Displays one task and reports user actions back to the parent through callback
+// never changes the task itself; the Dashboard controls the data.
 export function TaskItem({
   task,
   theme,
-  showReorder,
   onStatusChange,
   onDelete,
-  onEdit,
-  onMove
+  onEdit
 }: TaskItemProps) {
-  // Runs when the status dropdown changes.
+  // Runs when status dropdown changes.
   function handleStatusChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    // The option values are the only valid statuses, so this assertion is safe.
+  // The dropdown only has valid statuses, so we tell TypeScript this text is a TaskStatus.
     onStatusChange(task.id, event.target.value as TaskStatus);
   }
 
   return (
-    // The status, priority, and theme are added as CSS classes so each can be styled.
+    // The status, priority, and theme are added with CSS classes so each can be sty
+    // led.
     <article className={`task-item ${task.status} ${task.priority} ${theme}`}>
       <div className="task-item-header">
         <h3>{task.title}</h3>
@@ -58,28 +57,6 @@ export function TaskItem({
         >
           Delete
         </button>
-
-        {/* The move buttons only appear when the list is in manual order. */}
-        {showReorder && (
-          <>
-            <button
-              type="button"
-              className="secondary"
-              onClick={() => onMove(task.id, "up")}
-              aria-label={`Move ${task.title} up`}
-            >
-              ↑
-            </button>
-            <button
-              type="button"
-              className="secondary"
-              onClick={() => onMove(task.id, "down")}
-              aria-label={`Move ${task.title} down`}
-            >
-              ↓
-            </button>
-          </>
-        )}
       </div>
     </article>
   );

@@ -10,8 +10,7 @@ export function TaskList({
   onSortChange,
   onStatusChange,
   onDelete,
-  onEdit,
-  onMove
+  onEdit
 }: TaskListProps) {
   // Runs when the sort dropdown changes and reports the choice to the parent.
   function handleSortChange(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -26,7 +25,7 @@ export function TaskList({
         <div className="sort-control">
           <label htmlFor="sort">Sort by </label>
           <select id="sort" value={sort} onChange={handleSortChange}>
-            <option value="manual">Manual order</option>
+            <option value="default">Default order</option>
             <option value="due-asc">Due date (earliest first)</option>
             <option value="due-desc">Due date (latest first)</option>
             <option value="priority">Priority (high first)</option>
@@ -47,11 +46,9 @@ export function TaskList({
               key={task.id}
               task={task}
               theme={theme}
-              showReorder={sort === "manual"}
               onStatusChange={onStatusChange}
               onDelete={onDelete}
               onEdit={onEdit}
-              onMove={onMove}
             />
           ))}
         </div>
