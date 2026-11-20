@@ -21,7 +21,7 @@ export function TaskList({
     <section className="task-list">
       <div className="task-list-header">
         <h2>Tasks ({tasks.length})</h2>
-
+        {/* value={sort} connects the dropdown to the sort state in Dashboard. */}
         <div className="sort-control">
           <label htmlFor="sort">Sort by </label>
           <select id="sort" value={sort} onChange={handleSortChange}>
@@ -34,7 +34,8 @@ export function TaskList({
       </div>
 
       {/* Conditional rendering: show a message when there is nothing to display,
-          otherwise render the list. */}
+          otherwise render the list. 
+          ternary conditional.*/}
       {tasks.length === 0 ? (
         <p className="empty-message">No tasks to display.</p>
       ) : (
