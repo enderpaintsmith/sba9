@@ -1,3 +1,22 @@
+## Reflection
+
+### 1. What was the most challenging part of this project?
+
+The most challenging part was managing application state across multiple components while keeping the task data consistent. I had to understand how state flows from the Dashboard to child components through props and callback functions. Working through this helped me better understand React's component architecture and state management.
+
+### 2. What did you learn while completing this project?
+
+I strengthened my understanding of React hooks, particularly `useState`, `useEffect`, and `useMemo`. I also gained more experience with TypeScript interfaces, controlled forms, event handling, and using Local Storage to persist application data.
+
+### 3. What would you improve or add in the future?
+
+I would like to expand the dashboard with additional features, improve the user experience, and explore more advanced state management techniques. I would also like to add automated tests to improve reliability and make future changes easier to maintain.
+
+### 4. How did this project prepare you for building larger applications?
+
+This project helped me understand how to break an application into smaller, reusable components and organize logic into separate files. It reinforced the importance of maintainable code, clear data flow, type safety, and separating responsibilities within a React application.
+
+
 # Task Dashboard
 
 A task management dashboard built with React, TypeScript, and Vite. This application allows users to organize tasks, track progress, manage priorities, and monitor productivity through a centralized dashboard.
